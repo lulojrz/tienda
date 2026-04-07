@@ -6,9 +6,9 @@ const Footer = () => {
       <div className="container">
         <div className="hot-pick-banner">
           <div className="hot-pick-content">
-            <span className="hot-pick-badge">THIS WEEK'S HOT PICK</span>
+            <span className="hot-pick-badge">DESTACADO DE LA SEMANA</span>
             <h2 className="hot-pick-title">AIR JORDAN 4 'BRED REIMAGINED'</h2>
-            <button className="btn-primary">SHOP NOW</button>
+            <button className="btn-primary">COMPRAR AHORA</button>
           </div>
           <div className="hot-pick-image-container">
              <img src="/sneaker2.png" alt="Jordan 4 Bred" className="hot-pick-image" />
@@ -17,10 +17,10 @@ const Footer = () => {
 
         <div className="footer-bottom">
           <div className="footer-links">
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-            <a href="#">FAQs</a>
-            <a href="#">Shipping</a>
+            <a href="#">Nosotros</a>
+            <a href="#">Contacto</a>
+            <a href="#">Preguntas Frecuentes</a>
+            <a href="#">Envíos</a>
           </div>
 
           <div className="footer-socials">
@@ -30,9 +30,9 @@ const Footer = () => {
           </div>
 
           <div className="footer-newsletter">
-             <p className="newsletter-title">SUBSCRIBE FOR EXCLUSIVE OFFERS</p>
+             <p className="newsletter-title">SUSCRÍBETE PARA OFERTAS EXCLUSIVAS</p>
              <div className="newsletter-input-group">
-                <input type="email" placeholder="Enter your email address" className="newsletter-input" />
+                <input type="email" placeholder="Ingresa tu correo electrónico" className="newsletter-input" />
                 <button className="btn-primary newsletter-btn">→</button>
              </div>
              <div className="payment-icons">
@@ -46,7 +46,7 @@ const Footer = () => {
 
         <div className="footer-copyright">
           <span>SOLESTREET</span>
-          <p>© 2024 SOLESTREET. All rights reserved.</p>
+          <p>© 2024 SOLESTREET. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

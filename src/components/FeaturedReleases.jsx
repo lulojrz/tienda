@@ -4,34 +4,34 @@ import './FeaturedReleases.css';
 const MOCK_PRODUCTS = [
   {
     id: 1,
-    image: '/sneaker1.png',
-    brand: 'Nike',
-    name: 'NIKE DUNK LOW "PANDA"',
-    price: 110,
+    imagen_principal: '/sneaker1.png',
+    marca: 'Nike',
+    nombre: 'NIKE DUNK LOW "PANDA"',
+    precioBase: 110,
     rating: 5,
   },
   {
     id: 2,
-    image: '/sneaker3.png',
-    brand: 'Adidas',
-    name: 'YEEZY 350 V2 "ZEBRA"',
-    price: 220,
+    imagen_principal: '/sneaker3.png',
+    marca: 'Adidas',
+    nombre: 'YEEZY 350 V2 "ZEBRA"',
+    precioBase: 220,
     rating: 4.8,
   },
   {
     id: 3,
-    image: '/sneaker2.png',
-    brand: 'Jordan',
-    name: 'AIR JORDAN 1 "CHICAGO LOST & FOUND"',
-    price: 180,
+    imagen_principal: '/sneaker2.png',
+    marca: 'Jordan',
+    nombre: 'AIR JORDAN 1 "CHICAGO LOST & FOUND"',
+    precioBase: 180,
     rating: 5,
   },
   {
     id: 4,
-    image: '/sneaker1.png',
-    brand: 'New Balance',
-    name: 'NEW BALANCE 550',
-    price: 140,
+    imagen_principal: '/sneaker1.png', 
+    marca: 'New Balance',
+    nombre: 'NEW BALANCE 550',
+    precioBase: 140,
     rating: 4.5,
   }
 ];
@@ -40,12 +40,12 @@ const FeaturedReleases = () => {
   return (
     <section className="featured-section container">
       <div className="section-header">
-        <h2 className="section-title">FEATURED RELEASES</h2>
+        <h2 className="section-title">LANZAMIENTOS DESTACADOS</h2>
       </div>
 
       <div className="products-grid">
         {MOCK_PRODUCTS.map((product) => (
-          <ProductCard key={product.id} {...product} />
+          <ProductCard key={product.id} producto={product} />
         ))}
       </div>
 

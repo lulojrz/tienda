@@ -1,0 +1,52 @@
+.productos-page {
+  padding: 60px 20px;
+  min-height: 60vh;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+.productos-grid-full {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 100px 0;
+  color: var(--accent-color);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.no-products {
+  text-align: center;
+  grid-column: 1 / -1;
+  color: var(--text-secondary);
+  padding: 50px 0;
+  font-size: 1.2rem;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@media (max-width: 600px) {
+  .productos-grid-full {
+    grid-template-columns: 1fr;
+  }
+}

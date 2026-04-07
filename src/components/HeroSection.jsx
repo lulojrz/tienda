@@ -6,11 +6,11 @@ const HeroSection = () => {
       <div className="container hero-container">
         <div className="hero-content">
           <h1 className="hero-title">
-            STEP UP YOUR GAME.<br/>
-            <span className="text-gradient">EXPLORE THE LATEST RELEASES.</span>
+            ELEVA TU NIVEL.<br/>
+            <span className="text-gradient">EXPLORA LOS NUEVOS LANZAMIENTOS.</span>
           </h1>
-          <p className="hero-description">Discover the most exclusive drops and elevate your sneaker collection to the next level.</p>
-          <button className="btn-primary hero-btn">SHOP NOW</button>
+          <p className="hero-description">Descubre las entregas más exclusivas y lleva tu colección de zapatillas al siguiente nivel.</p>
+          <button className="btn-primary hero-btn">COMPRAR AHORA</button>
         </div>
         <div className="hero-image-wrapper">
           <img src="/sneaker1.png" alt="Featured Sneaker" className="hero-main-image" />
