@@ -15,7 +15,7 @@ const PaginaProductos = () => {
             setCargando(false);
         }
         cargarData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, []);
 
     return (
@@ -26,7 +26,7 @@ const PaginaProductos = () => {
                     <h1 className="section-title">NUESTROS PRODUCTOS</h1>
                     <p className="page-subtitle">Explora nuestra colección completa de componentes y artículos.</p>
                 </div>
-                
+
                 {cargando ? (
                     <div className="loading-spinner">CARGANDO PRODUCTOS...</div>
                 ) : (

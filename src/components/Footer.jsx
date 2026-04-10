@@ -1,17 +1,22 @@
 import './Footer.css';
+import { useProductos } from '../context/ProductosContext';
 
 const Footer = () => {
+
+  const { portada } = useProductos()
+
+
   return (
     <footer className="footer">
       <div className="container">
         <div className="hot-pick-banner">
           <div className="hot-pick-content">
             <span className="hot-pick-badge">DESTACADO DE LA SEMANA</span>
-            <h2 className="hot-pick-title">AIR JORDAN 4 'BRED REIMAGINED'</h2>
+            <h2 className="hot-pick-title">{portada.nombre}</h2>
             <button className="btn-primary">COMPRAR AHORA</button>
           </div>
           <div className="hot-pick-image-container">
-             <img src="/sneaker2.png" alt="Jordan 4 Bred" className="hot-pick-image" />
+            <img src={portada.imagen_principal} alt={portada.nombre} className="hot-pick-image" />
           </div>
         </div>
 
@@ -30,17 +35,17 @@ const Footer = () => {
           </div>
 
           <div className="footer-newsletter">
-             <p className="newsletter-title">SUSCRÍBETE PARA OFERTAS EXCLUSIVAS</p>
-             <div className="newsletter-input-group">
-                <input type="email" placeholder="Ingresa tu correo electrónico" className="newsletter-input" />
-                <button className="btn-primary newsletter-btn">→</button>
-             </div>
-             <div className="payment-icons">
-               <span className="payment-icon">VISA</span>
-               <span className="payment-icon">MC</span>
-               <span className="payment-icon">PayPal</span>
-               <span className="payment-icon">GPay</span>
-             </div>
+            <p className="newsletter-title">SUSCRÍBETE PARA OFERTAS EXCLUSIVAS</p>
+            <div className="newsletter-input-group">
+              <input type="email" placeholder="Ingresa tu correo electrónico" className="newsletter-input" />
+              <button className="btn-primary newsletter-btn">→</button>
+            </div>
+            <div className="payment-icons">
+              <span className="payment-icon">VISA</span>
+              <span className="payment-icon">MC</span>
+              <span className="payment-icon">PayPal</span>
+              <span className="payment-icon">GPay</span>
+            </div>
           </div>
         </div>
 

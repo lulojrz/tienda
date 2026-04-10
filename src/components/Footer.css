@@ -13,8 +13,8 @@
   justify-content: space-between;
   padding: 40px;
   margin-bottom: 60px;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
 }
 
 .hot-pick-content {
@@ -42,19 +42,24 @@
 
 .hot-pick-image-container {
   position: absolute;
-  right: -5%;
-  top: -20%;
-  width: 500px;
-  height: 140%;
+  right: 5%;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
+  pointer-events: none;
 }
 
 .hot-pick-image {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 150%;
   object-fit: contain;
-  transform: rotate(-15deg);
-  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
+  transform: rotate(-15deg) scale(1.1);
+  filter: drop-shadow(-10px 15px 25px rgba(0,0,0,0.6));
 }
 
 .footer-bottom {
