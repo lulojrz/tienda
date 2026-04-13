@@ -1,6 +1,9 @@
 import './ProductCard.css';
+import { Link } from 'react-router-dom';
+import { useProductos } from '../context/ProductosContext';
 
 const ProductCard = ({ producto }) => {
+  const { filtrarProducto } = useProductos();
 
   return (
     <div className="product-card">
@@ -22,7 +25,9 @@ const ProductCard = ({ producto }) => {
 
         <div className="product-actions">
           <button className="btn-primary flex-1">AGREGAR</button>
-          <button className="btn-secondary flex-1">VER DETALLES</button>
+          <Link to={`/productos/${producto.id}`}>
+            <button className="btn-secondary flex-1" onClick={() => filtrarProducto(producto.id)}>VER DETALLES</button>
+          </Link>
         </div>
       </div>
     </div>

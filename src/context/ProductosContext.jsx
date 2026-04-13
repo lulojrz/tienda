@@ -5,6 +5,8 @@ const ProductosContext = createContext();
 export const ProductosProvider = ({ children }) => {
     const [productos, setProductos] = useState([]);
     const [portada, setPortada] = useState([]);
+    const [producto, setProducto] = useState([]);
+    const [productoSeleccionado, setProductoSeleccionado] = useState([]);
 
 
     const obtenerProductos = async () => {
@@ -32,10 +34,24 @@ export const ProductosProvider = ({ children }) => {
         }
 
     }
+    const obtenerProducto = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/productos/${id}`);
+            const data = await response.json();
+            setProducto(data)
+        } catch (error) {
+            console.error('Error al obtener producto:', error);
+        }
+
+    }
+    const filtrarProducto = (id) => {
+        const producto = productos.find(producto => producto.id === id);
+        setProductoSeleccionado(producto)
+    }
 
 
     return (
-        <ProductosContext.Provider value={{ obtenerProductos, productos, portada }}>
+        <ProductosContext.Provider value={{ obtenerProductos, productos, portada, obtenerProducto, producto, filtrarProducto, productoSeleccionado }}>
             {children}
         </ProductosContext.Provider>
     )
