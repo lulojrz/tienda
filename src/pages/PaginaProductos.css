@@ -45,6 +45,66 @@
   100% { opacity: 0.6; }
 }
 
+.filters-section {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.filter-group select {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #333);
+  background-color: var(--bg-card, #1e1e1e);
+  color: var(--text-color, #fff);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-group select:hover, .filter-group select:focus {
+  border-color: var(--accent-color, #f0f0f0);
+}
+
+.range-slider {
+  -webkit-appearance: none;
+  width: 150px;
+  height: 8px;
+  background: var(--border-color, #333);
+  border-radius: 5px;
+  outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-color, #fff);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
 @media (max-width: 600px) {
   .productos-grid-full {
     grid-template-columns: 1fr;

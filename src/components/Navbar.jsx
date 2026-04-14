@@ -15,9 +15,7 @@ const Navbar = () => {
 
         <ul className="navbar-links">
           <li><NavLink to="/">INICIO</NavLink></li>
-          <li><NavLink to="/productos">NUEVOS PRODUCTOS</NavLink></li>
-          <li><NavLink to="/hombre">HOMBRE</NavLink></li>
-          <li><NavLink to="/mujer">MUJER</NavLink></li>
+          <li><NavLink to="/productos">PRODUCTOS</NavLink></li>
         </ul>
 
         <div className="navbar-icons">
