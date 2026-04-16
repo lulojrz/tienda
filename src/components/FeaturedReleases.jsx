@@ -17,7 +17,7 @@ const FeaturedReleases = () => {
     cargarData();
   }, [productos.length, obtenerProductos]);
 
-  // Mostrar los primeros 4 productos destacados, o menos si hay pocos
+
   const productosDestacados = productos.slice(0, 4);
 
   return (

@@ -1,5 +1,6 @@
 import './Footer.css';
 import { useProductos } from '../context/ProductosContext';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
 
@@ -13,7 +14,9 @@ const Footer = () => {
           <div className="hot-pick-content">
             <span className="hot-pick-badge">DESTACADO DE LA SEMANA</span>
             <h2 className="hot-pick-title">{portada.nombre}</h2>
-            <button className="btn-primary">COMPRAR AHORA</button>
+            <Link to={`/productos/${portada.id}`}>
+              <button className="btn-primary">COMPRAR AHORA</button>
+            </Link>
           </div>
           <div className="hot-pick-image-container">
             <img src={portada.imagen_principal} alt={portada.nombre} className="hot-pick-image" />
