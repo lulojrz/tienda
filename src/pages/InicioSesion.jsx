@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import './InicioSesion.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useAuth } from '../context/AuthContext';
+
 
 const InicioSesion = () => {
+    const { iniciarSesion } = useAuth();
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
-        nombre: '',
-        email: '',
+        usuario: '',
         password: ''
     });
 
@@ -21,7 +23,9 @@ const InicioSesion = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Formulario enviado", formData);
-        // Aquí iría la lógica de autenticación
+        iniciarSesion(formData)
+
+
     };
 
     return (
@@ -51,13 +55,13 @@ const InicioSesion = () => {
                         )}
 
                         <div className="form-group">
-                            <label htmlFor="email">Correo Electrónico</label>
+                            <label htmlFor="usuario">Usuario</label>
                             <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="tu@email.com"
-                                value={formData.email}
+                                type="text"
+                                id="usuario"
+                                name="usuario"
+                                placeholder="Tu usuario"
+                                value={formData.usuario}
                                 onChange={handleChange}
                                 required
                             />
