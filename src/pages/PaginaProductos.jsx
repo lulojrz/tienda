@@ -10,6 +10,7 @@ const PaginaProductos = () => {
     const [cargando, setCargando] = useState(true);
     const [filtroCategoria, setFiltroCategoria] = useState('Todas');
     const [filtroGenero, setFiltroGenero] = useState('Todos');
+    const [filtroMarca, setFiltroMarca] = useState('Todas');
     const [filtroPrecio, setFiltroPrecio] = useState(0);
 
     useEffect(() => {
@@ -30,14 +31,28 @@ const PaginaProductos = () => {
         return ['Todos', ...new Set(productos.map(p => p.categoria?.genero).filter(Boolean))];
     }, [productos]);
 
+    const marcas = useMemo(() => {
+        const marcasUnicas = new Map();
+        productos.forEach(p => {
+            if (p.marca) {
+                const marcaLower = p.marca.toLowerCase();
+                if (!marcasUnicas.has(marcaLower)) {
+                    marcasUnicas.set(marcaLower, p.marca);
+                }
+            }
+        });
+        return ['Todas', ...Array.from(marcasUnicas.values())];
+    }, [productos]);
+
     const productosFiltrados = useMemo(() => {
         return productos.filter(p => {
             const matchCategoria = filtroCategoria === 'Todas' || p.categoria?.nombre === filtroCategoria;
             const matchGenero = filtroGenero === 'Todos' || p.categoria?.genero === filtroGenero;
+            const matchMarca = filtroMarca === 'Todas' || (p.marca && p.marca.toLowerCase() === filtroMarca.toLowerCase());
             const matchPrecio = (p.precioBase || 0) <= filtroPrecio;
-            return matchCategoria && matchGenero && matchPrecio;
+            return matchCategoria && matchGenero && matchMarca && matchPrecio;
         });
-    }, [productos, filtroCategoria, filtroGenero, filtroPrecio]);
+    }, [productos, filtroCategoria, filtroGenero, filtroMarca, filtroPrecio]);
 
     useEffect(() => {
         const cargarData = async () => {
@@ -68,6 +83,18 @@ const PaginaProductos = () => {
                             >
                                 {generos.map(g => (
                                     <option key={g} value={g}>{g}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filter-group">
+                            <label htmlFor="marca">Marca:</label>
+                            <select
+                                id="marca"
+                                value={filtroMarca}
+                                onChange={(e) => setFiltroMarca(e.target.value)}
+                            >
+                                {marcas.map(m => (
+                                    <option key={m} value={m}>{m}</option>
                                 ))}
                             </select>
                         </div>

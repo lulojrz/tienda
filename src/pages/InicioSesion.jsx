@@ -22,7 +22,6 @@ const InicioSesion = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Formulario enviado", formData);
         iniciarSesion(formData)
 
 

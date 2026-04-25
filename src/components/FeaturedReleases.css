@@ -1,5 +1,6 @@
 .featured-section {
   padding: 60px 20px;
+  position: relative;
 }
 
 .section-header {
@@ -13,43 +14,86 @@
   color: white;
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 25px;
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
   margin-bottom: 40px;
 }
 
-.slider-dots {
+.carousel-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 25px;
+  padding: 10px 0;
+  width: 100%;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.carousel-container::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.carousel-item {
+  flex: 0 0 calc(25% - 18.75px); /* Desktop: 4 items */
+  scroll-snap-align: start;
+}
+
+.carousel-btn {
+  background-color: var(--accent-color, #ff4500); /* Use accent or fallback */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  position: absolute;
+  z-index: 10;
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-top: 20px;
+  align-items: center;
+  transition: transform 0.2s, background-color 0.3s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: var(--border-color);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.carousel-btn:hover {
+  transform: scale(1.1);
+  background-color: var(--accent-color-hover, #e03e00);
 }
 
-.dot.active {
-  background-color: var(--accent-color);
-  width: 20px;
-  border-radius: 5px;
+.carousel-btn.left {
+  left: -20px;
 }
 
-@media (max-width: 1024px) {
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
+.carousel-btn.right {
+  right: -20px;
+}
+
+/* Hide buttons on mobile for pure touch scrolling */
+@media (max-width: 768px) {
+  .carousel-btn {
+    display: none;
   }
 }
 
-@media (max-width: 600px) {
-  .products-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 1024px) {
+  .carousel-item {
+    flex: 0 0 calc(33.333% - 16.666px); /* Tablet: 3 items */
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-item {
+    flex: 0 0 calc(50% - 12.5px); /* Mobile Landscape: 2 items */
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-item {
+    flex: 0 0 100%; /* Mobile Portrait: 1 item */
   }
 }
