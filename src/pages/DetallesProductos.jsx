@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProductos } from '../context/ProductosContext';
+import { useCart } from '../context/CartContext';
 import './DetallesProductos.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -8,6 +9,7 @@ import Footer from '../components/Footer';
 const DetallesProductos = () => {
     const { id } = useParams();
     const { obtenerProducto, producto } = useProductos();
+    const { addToCart, toggleCart } = useCart();
 
     const [selectedColor, setSelectedColor] = useState(null);
     const [selectedSize, setSelectedSize] = useState(null);
@@ -71,6 +73,23 @@ const DetallesProductos = () => {
             currency: 'ARS',
             maximumFractionDigits: 0
         }).format(price);
+    };
+
+    const handleAddToCart = () => {
+        if (!selectedVariant) return;
+
+        const productToAdd = {
+            id: baseData.id, // el ID del producto general, o podríamos usar el de la variante
+            nombre: baseData.nombre,
+            precio: priceToDisplay,
+            imagen: activeImage,
+            color: selectedColor,
+            talla: selectedSize,
+            sku: selectedVariant.sku // si es necesario
+        };
+
+        addToCart(productToAdd);
+        toggleCart();
     };
 
     return (
@@ -170,6 +189,7 @@ const DetallesProductos = () => {
                             <button
                                 className="btn-primary add-to-cart-btn"
                                 disabled={!selectedVariant || selectedVariant.stock === 0}
+                                onClick={handleAddToCart}
                             >
                                 AGREGAR AL CARRITO
                             </button>

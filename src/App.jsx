@@ -7,10 +7,12 @@ import PaginaPrincipal from './pages/PaginaPrincipal';
 import PaginaProductos from './pages/PaginaProductos';
 import DetallesProductos from './pages/DetallesProductos';
 import InicioSesion from './pages/InicioSesion';
+import CartDrawer from './components/CartDrawer';
 
 function App() {
   return (
     <>
+      <CartDrawer />
       <Routes>
         <Route path='/' element={<PaginaPrincipal />}></Route>
         <Route path='/productos' element={<PaginaProductos />}></Route>

@@ -24,9 +24,8 @@ const ProductCard = ({ producto }) => {
         </div>
 
         <div className="product-actions">
-          <button className="btn-primary flex-1">AGREGAR</button>
-          <Link to={`/productos/${producto.id}`}>
-            <button className="btn-secondary flex-1" onClick={() => filtrarProducto(producto.id)}>VER DETALLES</button>
+          <Link to={`/productos/${producto.id}`} style={{ width: '100%' }}>
+            <button className="btn-primary" style={{ width: '100%' }} onClick={() => filtrarProducto(producto.id)}>VER DETALLES</button>
           </Link>
         </div>
       </div>
