@@ -9,7 +9,7 @@ const Navbar = () => {
   const { user, isLogin, cerrarSesion } = useAuth();
   const { toggleCart, getItemCount } = useCart();
   const [showUserModal, setShowUserModal] = useState(false);
-  
+
   return (
     <nav className="navbar">
       <div className="navbar-container container">
@@ -57,7 +57,10 @@ const Navbar = () => {
                       <button
                         className="btn-primary"
                         style={{ width: '100%', marginTop: '15px' }}
-                        onClick={() => { cerrarSesion(); setShowUserModal(false); }}
+                        onClick={() => {
+                          cerrarSesion(); setShowUserModal(false);
+                          localStorage.clear();
+                        }}
                       >
                         Cerrar sesión
                       </button>

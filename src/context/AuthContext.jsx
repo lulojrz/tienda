@@ -1,5 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -18,24 +20,51 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.ok) {
-                console.log("buen inicio");
+                Swal.fire({
+                    title: "Inicio de sesión exitoso",
+                    text: "Has iniciado sesión correctamente",
+                    theme: "dark",
+                    icon: "success",
+                    confirmButtonText: "Aceptar"
+                });
+
                 localStorage.setItem("isLogin", true);
                 localStorage.setItem("user", body.usuario);
                 setIsLogin(true);
                 setUser(body.usuario);
-                alert("Inicio de sesión exitoso");
                 navigate("/");
             } else {
-                console.error("credenciales incorrectas");
-                alert("Usuario o contraseña incorrectos");
+                Swal.fire({
+                    title: "Inicio de sesión fallido",
+                    text: "Usuario o contraseña incorrectos",
+                    theme: "dark",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
             }
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            alert("Ocurrió un error al intentar iniciar sesión. Por favor, inténtalo más tarde.");
+            Swal.fire({
+                title: "Error",
+                text: "Ocurrió un error al intentar iniciar sesión. Por favor, inténtalo más tarde.",
+                theme: "dark",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
         }
     }
 
     const cerrarSesion = () => {
+        Swal.fire({
+            title: "Cerrar sesión",
+            text: "¿Estás seguro de que deseas cerrar sesión?",
+            theme: "dark",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Aceptar",
+            cancelButtonText: "Cancelar"
+        });
+
         localStorage.removeItem("isLogin");
         localStorage.removeItem("user");
         setIsLogin(false);

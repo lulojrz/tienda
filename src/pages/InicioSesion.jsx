@@ -9,8 +9,12 @@ const InicioSesion = () => {
     const { iniciarSesion } = useAuth();
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
+        nombre: '',
         usuario: '',
-        password: ''
+        password: '',
+        email: '',
+        telefono: ''
+        activo: 1
     });
 
     const handleChange = (e) => {
@@ -22,8 +26,12 @@ const InicioSesion = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        iniciarSesion(formData)
-
+        if (isLogin) {
+            iniciarSesion(formData)
+        }
+        else {
+            console.log(formData)
+        }
 
     };
 
@@ -39,18 +47,44 @@ const InicioSesion = () => {
 
                     <form onSubmit={handleSubmit} className="auth-form">
                         {!isLogin && (
-                            <div className="form-group">
-                                <label htmlFor="nombre">Nombre Completo</label>
-                                <input
-                                    type="text"
-                                    id="nombre"
-                                    name="nombre"
-                                    placeholder="Juan Pérez"
-                                    value={formData.nombre}
-                                    onChange={handleChange}
-                                    required={!isLogin}
-                                />
-                            </div>
+                            <>
+                                <div className="form-group">
+                                    <label htmlFor="nombre">Nombre Completo</label>
+                                    <input
+                                        type="text"
+                                        id="nombre"
+                                        name="nombre"
+                                        placeholder="Juan Pérez"
+                                        value={formData.nombre}
+                                        onChange={handleChange}
+                                        required={!isLogin}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">Correo Electrónico</label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="tucorreo@ejemplo.com"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required={!isLogin}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="telefono">Teléfono</label>
+                                    <input
+                                        type="tel"
+                                        id="telefono"
+                                        name="telefono"
+                                        placeholder="Tu número de teléfono"
+                                        value={formData.telefono}
+                                        onChange={handleChange}
+                                        required={!isLogin}
+                                    />
+                                </div>
+                            </>
                         )}
 
                         <div className="form-group">
@@ -81,10 +115,7 @@ const InicioSesion = () => {
 
                         {isLogin && (
                             <div className="form-options">
-                                <label className="remember-me">
-                                    <input type="checkbox" />
-                                    <span>Recordarme</span>
-                                </label>
+
                                 <a href="#" className="forgot-password">¿Olvidaste tu contraseña?</a>
                             </div>
                         )}
