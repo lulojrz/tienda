@@ -14,7 +14,7 @@ const InicioSesion = () => {
         password: '',
         email: '',
         telefono: ''
-        activo: 1
+
     });
 
     const handleChange = (e) => {

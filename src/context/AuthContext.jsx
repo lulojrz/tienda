@@ -20,6 +20,8 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.ok) {
+                const data = await response.json();
+
                 Swal.fire({
                     title: "Inicio de sesión exitoso",
                     text: "Has iniciado sesión correctamente",
@@ -29,6 +31,7 @@ export const AuthProvider = ({ children }) => {
                 });
 
                 localStorage.setItem("isLogin", true);
+                localStorage.setItem("token", data.token);
                 localStorage.setItem("user", body.usuario);
                 setIsLogin(true);
                 setUser(body.usuario);
@@ -58,18 +61,32 @@ export const AuthProvider = ({ children }) => {
         Swal.fire({
             title: "Cerrar sesión",
             text: "¿Estás seguro de que deseas cerrar sesión?",
-            theme: "dark",
             icon: "question",
             showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
             confirmButtonText: "Aceptar",
             cancelButtonText: "Cancelar"
-        });
+        }).then((result) => {
+            // Solo si el usuario hizo clic en "Aceptar"
+            if (result.isConfirmed) {
+                // 1. Borramos TODO lo relacionado a la sesión
+                localStorage.removeItem("isLogin");
+                localStorage.setItem("isLogin", "false"); // Opcional, mejor borrarlo
+                localStorage.removeItem("user");
+                localStorage.removeItem("token"); // <--- ¡IMPORTANTÍSIMO BORRAR EL TOKEN!
 
-        localStorage.removeItem("isLogin");
-        localStorage.removeItem("user");
-        setIsLogin(false);
-        setUser(null);
-        navigate("/");
+                // 2. Limpiamos los estados de React
+                setIsLogin(false);
+                setUser(null);
+
+                // 3. Redirigimos al inicio
+                navigate("/");
+
+                // Opcional: Una alerta chiquita de que salió bien
+                Swal.fire("¡Sesión cerrada!", "Has salido de tu cuenta correctamente.", "success");
+            }
+        });
     };
 
     return (

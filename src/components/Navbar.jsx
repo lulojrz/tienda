@@ -59,7 +59,7 @@ const Navbar = () => {
                         style={{ width: '100%', marginTop: '15px' }}
                         onClick={() => {
                           cerrarSesion(); setShowUserModal(false);
-                          localStorage.clear();
+
                         }}
                       >
                         Cerrar sesión
