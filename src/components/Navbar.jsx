@@ -54,12 +54,20 @@ const Navbar = () => {
                       <p className="status-online" >
                         <span className="status-dot"></span> Conectado
                       </p>
+                      <Link to="/perfil" style={{ textDecoration: 'none' }}>
+                        <button
+                          className="btn-secondary"
+                          style={{ width: '100%', marginBottom: '10px', backgroundColor: 'transparent', color: '#fff', border: '1px solid #333', padding: '10px', borderRadius: '4px', cursor: 'pointer' }}
+                          onClick={() => setShowUserModal(false)}
+                        >
+                          Ver Perfil
+                        </button>
+                      </Link>
                       <button
                         className="btn-primary"
-                        style={{ width: '100%', marginTop: '15px' }}
+                        style={{ width: '100%' }}
                         onClick={() => {
                           cerrarSesion(); setShowUserModal(false);
-
                         }}
                       >
                         Cerrar sesión
