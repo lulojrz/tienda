@@ -5,15 +5,15 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const CartDrawer = () => {
-  const { 
-    isCartOpen, 
-    closeCart, 
-    cartItems, 
-    removeFromCart, 
-    updateQuantity, 
-    getCartTotal 
+  const {
+    isCartOpen,
+    closeCart,
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getCartTotal
   } = useCart();
-  
+
   const { isLogin } = useAuth();
   const navigate = useNavigate();
 
@@ -22,10 +22,8 @@ const CartDrawer = () => {
       closeCart();
       navigate('/inicioSesion');
     } else {
-      // Por ahora solo mostrar un alert ya que no hay página de checkout
-      alert('Procesando pago... ¡Gracias por tu compra!');
-      // clearCart(); podria llamarse después de un pago exitoso
       closeCart();
+      navigate('/checkout');
     }
   };
 
@@ -40,8 +38,8 @@ const CartDrawer = () => {
   return (
     <>
       {/* Overlay de fondo oscuro cuando el carrito está abierto */}
-      <div 
-        className={`cart-overlay ${isCartOpen ? 'open' : ''}`} 
+      <div
+        className={`cart-overlay ${isCartOpen ? 'open' : ''}`}
         onClick={closeCart}
       ></div>
 
@@ -76,12 +74,12 @@ const CartDrawer = () => {
                 <div className="cart-item-image">
                   <img src={item.imagen} alt={item.nombre} />
                 </div>
-                
+
                 <div className="cart-item-details">
                   <div className="cart-item-title-row">
                     <h4>{item.nombre}</h4>
-                    <button 
-                      className="remove-item-btn" 
+                    <button
+                      className="remove-item-btn"
                       onClick={() => removeFromCart(item.id, item.color, item.talla)}
                       title="Eliminar producto"
                     >
@@ -91,24 +89,24 @@ const CartDrawer = () => {
                       </svg>
                     </button>
                   </div>
-                  
+
                   <div className="cart-item-variants">
                     {item.color && <span>Color: {item.color}</span>}
                     {item.talla && <span>Talle: {item.talla}</span>}
                   </div>
-                  
+
                   <div className="cart-item-price-row">
                     <span className="cart-item-price">{formatPrice(item.precio)}</span>
-                    
+
                     <div className="quantity-controls">
-                      <button 
+                      <button
                         onClick={() => updateQuantity(item.id, item.color, item.talla, -1)}
                         disabled={item.cantidad <= 1}
                       >
                         -
                       </button>
                       <span>{item.cantidad}</span>
-                      <button 
+                      <button
                         onClick={() => updateQuantity(item.id, item.color, item.talla, 1)}
                       >
                         +
@@ -127,7 +125,7 @@ const CartDrawer = () => {
               <span>Total</span>
               <span>{formatPrice(getCartTotal())}</span>
             </div>
-            
+
             {!isLogin && (
               <div className="cart-auth-warning">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -138,7 +136,7 @@ const CartDrawer = () => {
                 <span>Debes iniciar sesión para comprar.</span>
               </div>
             )}
-            
+
             <button className="btn-primary checkout-btn" onClick={handleCheckout}>
               {isLogin ? 'Proceder al Pago' : 'Iniciar Sesión para Pagar'}
             </button>
