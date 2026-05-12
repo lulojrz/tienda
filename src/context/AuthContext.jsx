@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [isLogin, setIsLogin] = useState(() => localStorage.getItem("isLogin") === "true");
     const [user, setUser] = useState(() => localStorage.getItem("user") || null);
+    const [id, setId] = useState(() => localStorage.getItem("id") || null);
     const navigate = useNavigate();
 
     const iniciarSesion = async (body) => {
@@ -21,6 +22,11 @@ export const AuthProvider = ({ children }) => {
 
             if (response.ok) {
                 const data = await response.json();
+
+                localStorage.setItem("id", data.id);
+                setId(data.id);
+
+
 
                 Swal.fire({
                     title: "Inicio de sesión exitoso",
@@ -57,6 +63,28 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const datosClientes = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/clientes/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error al obtener los datos del cliente:', error);
+            Swal.fire({
+                title: "Error",
+                text: "Ocurrió un error al intentar obtener los datos del cliente. Por favor, inténtalo más tarde.",
+                theme: "dark",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
+        }
+    }
+
+
     const cerrarSesion = () => {
         Swal.fire({
             title: "Cerrar sesión",
@@ -90,7 +118,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ iniciarSesion, cerrarSesion, isLogin, user, setIsLogin, setUser }}>
+        <AuthContext.Provider value={{ iniciarSesion, cerrarSesion, isLogin, user, setIsLogin, setUser, datosClientes, id }}>
             {children}
         </AuthContext.Provider>
     )

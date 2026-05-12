@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import './Checkout.css';
+import { useAuth } from '../context/AuthContext';
 
 const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
+  const { user, id, datosClientes } = useAuth();
 
   const [formData, setFormData] = useState({
     nombre: '',
@@ -45,6 +47,13 @@ const Checkout = () => {
     }).format(price);
   };
 
+  useEffect(() => {
+    datosClientes(id).then((data) => {
+      setFormData(data);
+      console.log(data);
+    });
+  }, [id]);
+
   // Si el carrito está vacío, no debería estar aquí, redirigir o mostrar mensaje
   if (cartItems.length === 0) {
     return (
@@ -73,7 +82,7 @@ const Checkout = () => {
       <div className="checkout-content">
         <div className="checkout-form-section">
           <form onSubmit={handleSubmit} className="checkout-form">
-            
+
             <div className="form-group-section">
               <h3>Datos de Envío</h3>
               <div className="form-row">
@@ -111,7 +120,7 @@ const Checkout = () => {
 
             <div className="form-group-section">
               <h3>Información de Pago</h3>
-              
+
               <div className="payment-methods">
                 <label className={`payment-method-label ${formData.metodoPago === 'tarjeta' ? 'active' : ''}`}>
                   <input type="radio" name="metodoPago" value="tarjeta" checked={formData.metodoPago === 'tarjeta'} onChange={handleChange} />
@@ -136,43 +145,43 @@ const Checkout = () => {
 
                   <div className="form-group">
                     <label htmlFor="numeroTarjeta">Número de tarjeta</label>
-                    <input 
-                      type="text" 
-                      id="numeroTarjeta" 
-                      name="numeroTarjeta" 
-                      required 
-                      maxLength="19" 
+                    <input
+                      type="text"
+                      id="numeroTarjeta"
+                      name="numeroTarjeta"
+                      required
+                      maxLength="19"
                       placeholder="0000 0000 0000 0000"
-                      value={formData.numeroTarjeta} 
-                      onChange={handleChange} 
+                      value={formData.numeroTarjeta}
+                      onChange={handleChange}
                     />
                   </div>
 
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="fechaExpiracion">Fecha de Expiración</label>
-                      <input 
-                        type="text" 
-                        id="fechaExpiracion" 
-                        name="fechaExpiracion" 
-                        required 
-                        placeholder="MM/AA" 
+                      <input
+                        type="text"
+                        id="fechaExpiracion"
+                        name="fechaExpiracion"
+                        required
+                        placeholder="MM/AA"
                         maxLength="5"
-                        value={formData.fechaExpiracion} 
-                        onChange={handleChange} 
+                        value={formData.fechaExpiracion}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="form-group">
                       <label htmlFor="cvv">CVV</label>
-                      <input 
-                        type="text" 
-                        id="cvv" 
-                        name="cvv" 
-                        required 
-                        maxLength="4" 
+                      <input
+                        type="text"
+                        id="cvv"
+                        name="cvv"
+                        required
+                        maxLength="4"
                         placeholder="123"
-                        value={formData.cvv} 
-                        onChange={handleChange} 
+                        value={formData.cvv}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -220,7 +229,7 @@ const Checkout = () => {
               </div>
             ))}
           </div>
-          
+
           <div className="checkout-totals">
             <div className="checkout-total-row">
               <span>Subtotal</span>

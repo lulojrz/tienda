@@ -13,7 +13,8 @@ const InicioSesion = () => {
         usuario: '',
         password: '',
         email: '',
-        telefono: ''
+        telefono: '',
+        rol: "USER"
 
     });
 
