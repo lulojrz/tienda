@@ -108,6 +108,7 @@ const CartDrawer = () => {
                       <span>{item.cantidad}</span>
                       <button
                         onClick={() => updateQuantity(item.id, item.color, item.talla, 1)}
+                        disabled={item.stock && item.cantidad >= item.stock}
                       >
                         +
                       </button>

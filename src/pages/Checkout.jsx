@@ -7,21 +7,18 @@ import { useAuth } from '../context/AuthContext';
 const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
-  const { user, id, datosClientes } = useAuth();
+  const { user, id, datosClientes, setId } = useAuth();
 
   const [formData, setFormData] = useState({
-    nombre: '',
-    apellido: '',
-    email: '',
-    direccion: '',
-    ciudad: '',
-    codigoPostal: '',
-    metodoPago: 'tarjeta',
-    nombreTarjeta: '',
-    numeroTarjeta: '',
-    fechaExpiracion: '',
-    cvv: ''
+    cliente: "",
+    fecha: new Date(),
+    montoTotal: getCartTotal(),
+    direccion: "",
+    ciudad: "",
+    cp: ""
+
   });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,12 +28,42 @@ const Checkout = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const clienteData = await datosClientes(id);
+      const detallesEnvio = cartItems.map(item => ({
+        variante: { id: item.varianteId }, // variante_id en la DB
+        cantidad: item.cantidad,
+        precioUnitario: item.precio, // precio_unitario en la DB
+        talle: item.talla,
+        color: item.color
+      }));
+      setFormData(prev => ({
+        ...prev,
+        cliente: clienteData,
+        detallesEnvio: detallesEnvio,
+      }));
+      console.log("Datos: ", formData);
+      console.log("carrito", cartItems)
+    } catch (error) {
+      console.error('Error al obtener los datos del cliente:', error);
+      Swal.fire({
+        title: "Error",
+        text: "Ocurrió un error al intentar obtener los datos del cliente. Por favor, inténtalo más tarde.",
+        theme: "dark",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+    }
+
     // Simulación de procesamiento de pago
-    alert('Pago procesado con éxito. ¡Gracias por tu compra!');
-    clearCart();
-    navigate('/');
+
+
+    //alert('Pago procesado con éxito. ¡Gracias por tu compra!');
+
+    //clearCart();
+    //navigate('/');
   };
 
   const formatPrice = (price) => {
@@ -48,10 +75,8 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    datosClientes(id).then((data) => {
-      setFormData(data);
-      console.log(data);
-    });
+    setId(localStorage.getItem("id"))
+
   }, [id]);
 
   // Si el carrito está vacío, no debería estar aquí, redirigir o mostrar mensaje
@@ -88,17 +113,17 @@ const Checkout = () => {
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="nombre">Nombre</label>
-                  <input type="text" id="nombre" name="nombre" required value={formData.nombre} onChange={handleChange} />
+                  <input type="text" id="nombre" name="nombre" required value={formData.nombre} />
                 </div>
                 <div className="form-group">
                   <label htmlFor="apellido">Apellido</label>
-                  <input type="text" id="apellido" name="apellido" required value={formData.apellido} onChange={handleChange} />
+                  <input type="text" id="apellido" name="apellido" required value={formData.apellido} />
                 </div>
               </div>
 
               <div className="form-group">
                 <label htmlFor="email">Correo Electrónico</label>
-                <input type="email" id="email" name="email" required value={formData.email} onChange={handleChange} />
+                <input type="email" id="email" name="email" required value={formData.email} />
               </div>
 
               <div className="form-group">
@@ -112,8 +137,8 @@ const Checkout = () => {
                   <input type="text" id="ciudad" name="ciudad" required value={formData.ciudad} onChange={handleChange} />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="codigoPostal">Código Postal</label>
-                  <input type="text" id="codigoPostal" name="codigoPostal" required value={formData.codigoPostal} onChange={handleChange} />
+                  <label htmlFor="cp">Código Postal</label>
+                  <input type="text" id="cp" name="cp" required value={formData.cp} onChange={handleChange} />
                 </div>
               </div>
             </div>

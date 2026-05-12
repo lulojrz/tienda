@@ -99,11 +99,7 @@ export const AuthProvider = ({ children }) => {
             // Solo si el usuario hizo clic en "Aceptar"
             if (result.isConfirmed) {
                 // 1. Borramos TODO lo relacionado a la sesión
-                localStorage.removeItem("isLogin");
-                localStorage.setItem("isLogin", "false"); // Opcional, mejor borrarlo
-                localStorage.removeItem("user");
-                localStorage.removeItem("token"); // <--- ¡IMPORTANTÍSIMO BORRAR EL TOKEN!
-
+                localStorage.clear();
                 // 2. Limpiamos los estados de React
                 setIsLogin(false);
                 setUser(null);
@@ -118,7 +114,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ iniciarSesion, cerrarSesion, isLogin, user, setIsLogin, setUser, datosClientes, id }}>
+        <AuthContext.Provider value={{ iniciarSesion, cerrarSesion, isLogin, user, setIsLogin, setUser, datosClientes, id, setId }}>
             {children}
         </AuthContext.Provider>
     )

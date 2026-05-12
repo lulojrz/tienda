@@ -27,6 +27,22 @@ export const CartProvider = ({ children }) => {
     };
 
     const addToCart = (productToAdd) => {
+        const existingItem = cartItems.find(
+            item => item.id === productToAdd.id && 
+                    item.color === productToAdd.color && 
+                    item.talla === productToAdd.talla
+        );
+
+        if (existingItem && existingItem.cantidad >= productToAdd.stock) {
+            alert("No hay más stock disponible para este producto.");
+            return;
+        }
+
+        if (productToAdd.stock <= 0) {
+            alert("Producto sin stock.");
+            return;
+        }
+
         setCartItems((prevItems) => {
             // Un producto en el carrito se identifica por su ID y opcionalmente su color/talle si es una variante
             const existingItemIndex = prevItems.findIndex(
@@ -63,8 +79,14 @@ export const CartProvider = ({ children }) => {
             return prevItems.map(item => {
                 if (item.id === productId && item.color === color && item.talla === talla) {
                     const newQuantity = item.cantidad + delta;
-                    // Asegurar que la cantidad no sea menor que 1
-                    return { ...item, cantidad: newQuantity > 0 ? newQuantity : 1 };
+                    // Asegurar que la cantidad no sea menor que 1 ni supere el stock
+                    if (newQuantity < 1) {
+                        return { ...item, cantidad: 1 };
+                    }
+                    if (item.stock && newQuantity > item.stock) {
+                        return { ...item, cantidad: item.stock };
+                    }
+                    return { ...item, cantidad: newQuantity };
                 }
                 return item;
             });

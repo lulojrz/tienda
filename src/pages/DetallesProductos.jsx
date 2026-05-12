@@ -9,7 +9,7 @@ import Footer from '../components/Footer';
 const DetallesProductos = () => {
     const { id } = useParams();
     const { obtenerProducto, producto } = useProductos();
-    const { addToCart, toggleCart } = useCart();
+    const { addToCart, toggleCart, cartItems } = useCart();
 
     const [selectedColor, setSelectedColor] = useState(null);
     const [selectedSize, setSelectedSize] = useState(null);
@@ -75,8 +75,15 @@ const DetallesProductos = () => {
         }).format(price);
     };
 
+    const cartItem = cartItems?.find(item => 
+        item.id === baseData?.id && 
+        item.color === selectedColor && 
+        item.talla === selectedSize
+    );
+    const reachedMaxStock = cartItem && selectedVariant && cartItem.cantidad >= selectedVariant.stock;
+
     const handleAddToCart = () => {
-        if (!selectedVariant) return;
+        if (!selectedVariant || reachedMaxStock) return;
 
         const productToAdd = {
             id: baseData.id, // el ID del producto general, o podríamos usar el de la variante
@@ -85,7 +92,8 @@ const DetallesProductos = () => {
             imagen: activeImage,
             color: selectedColor,
             talla: selectedSize,
-            sku: selectedVariant.sku // si es necesario
+            sku: selectedVariant.sku, // si es necesario
+            stock: selectedVariant.stock
         };
 
         addToCart(productToAdd);
@@ -188,10 +196,10 @@ const DetallesProductos = () => {
                         <div className="action-buttons">
                             <button
                                 className="btn-primary add-to-cart-btn"
-                                disabled={!selectedVariant || selectedVariant.stock === 0}
+                                disabled={!selectedVariant || selectedVariant.stock === 0 || reachedMaxStock}
                                 onClick={handleAddToCart}
                             >
-                                AGREGAR AL CARRITO
+                                {reachedMaxStock ? 'LÍMITE ALCANZADO' : 'AGREGAR AL CARRITO'}
                             </button>
                         </div>
 
