@@ -4,11 +4,13 @@ import { useCart } from '../context/CartContext';
 import './Checkout.css';
 import { useAuth } from '../context/AuthContext';
 import { useProductos } from '../context/ProductosContext';
+import Swal from 'sweetalert2';
 
 const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
   const { user, id, setId, venta } = useAuth(); // 'venta' es la función del Context
+  const { obtenerIdProducto } = useProductos();
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -64,15 +66,84 @@ const Checkout = () => {
         // !!! ACÁ TENÉS EL ID AUTOGENERADO POR SPRINT BOOT !!!
         console.log("ID de la venta creada:", resultado.id);
 
-        // Aquí vas a llamar a tu segunda función para guardar los detalles:
-        // await guardarDetallesDeVenta(resultado.id, cartItems);
+        // Armamos los detalles de la venta con el formato específico
+        const nuevosDetalles = await Promise.all(cartItems.map(async (item) => {
+          // Hacemos la solicitud GET para traer los datos del producto
+          const productoDB = await obtenerIdProducto(item.id);
+          console.log(`Producto consultado (ID: ${item.id}):`, productoDB);
 
+          // Buscamos la variante que coincide con el color y talla del carrito
+          let variante_id = null; 
+          
+          // En DetallesProductos parece que la respuesta en sí es el arreglo de variantes
+          const variantes = Array.isArray(productoDB) ? productoDB : (productoDB?.variantes || []);
 
+          if (variantes.length > 0) {
+            const varianteEncontrada = variantes.find(v => 
+              v.color === item.color && v.talla === item.talla
+            );
+            
+            // Si la encontramos, asignamos su id, sino tomamos la primera
+            if (varianteEncontrada) {
+              variante_id = varianteEncontrada.id;
+            } else {
+              variante_id = variantes[0].id;
+            }
+          }
 
-        // O a donde quieras redirigir al éxito
+          return {
+            venta_id: resultado.id,
+            producto_id: item.id, 
+            cantidad: item.cantidad,
+            variante_id: variante_id
+          };
+        }));
+        
+        console.log("detallesVenta:", nuevosDetalles);
+        setDetallesVenta(nuevosDetalles);
+
+        // Enviamos los detalles de la venta mediante POST respetando la sincronía
+        const respuestaDetalles = await fetch('http://localhost:8080/confirmar/detalles', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem("token")}`
+          },
+          body: JSON.stringify(nuevosDetalles)
+        });
+
+        if (respuestaDetalles.ok) {
+          console.log("Detalles guardados exitosamente en el servidor");
+          
+          await Swal.fire({
+            icon: 'success',
+            title: '¡Compra Exitosa!',
+            text: 'Tu pedido se ha procesado correctamente.',
+            confirmButtonText: 'Continuar',
+            confirmButtonColor: '#3085d6'
+          });
+
+          // Si todo salió bien, vaciamos el carrito y redirigimos a los productos
+          clearCart();
+          navigate('/productos');
+        } else {
+          console.error("Hubo un problema al guardar los detalles");
+          await Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Hubo un problema al guardar los detalles de la venta.',
+            confirmButtonColor: '#d33'
+          });
+        }
       }
     } catch (error) {
       console.error("Error al procesar el pago en el submit:", error);
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error de conexión',
+        text: 'Ocurrió un error al procesar la compra. Intenta de nuevo.',
+        confirmButtonColor: '#d33'
+      });
     }
   };
 
