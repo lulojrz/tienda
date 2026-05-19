@@ -3,22 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import './Checkout.css';
 import { useAuth } from '../context/AuthContext';
+import { useProductos } from '../context/ProductosContext';
 
 const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const navigate = useNavigate();
-  const { user, id, datosClientes, setId } = useAuth();
+  const { user, id, setId, venta } = useAuth(); // 'venta' es la función del Context
 
   const [formData, setFormData] = useState({
-    cliente: "",
-    fecha: new Date(),
-    montoTotal: getCartTotal(),
+    nombre: "",
+    apellido: "",
+    email: "",
     direccion: "",
     ciudad: "",
-    cp: ""
-
+    cp: "",
+    metodoPago: "efectivo", // Valor por defecto para evitar errores
+    montoTotal: getCartTotal()
   });
+  const [detallesVenta, setDetallesVenta] = useState([{
 
+  }]);
+
+  useEffect(() => {
+    const savedId = localStorage.getItem("id");
+    if (savedId) {
+      setId(savedId);
+    }
+  }, [setId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,41 +40,40 @@ const Checkout = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // 1. Armamos el objeto limpio para la tabla 'ventas' (Cabecera)
+    const datosVenta = {
+      cliente: { id: Number(id) },
+      montoTotal: formData.montoTotal,
+      metodoPago: formData.metodoPago,
+      direccion: formData.direccion,
+      ciudad: formData.ciudad,
+      cp: formData.cp,
+      fecha: new Date().toISOString()
+    };
+
     try {
-      e.preventDefault();
-      const clienteData = await datosClientes(id);
-      const detallesEnvio = cartItems.map(item => ({
-        variante: { id: item.varianteId }, // variante_id en la DB
-        cantidad: item.cantidad,
-        precioUnitario: item.precio, // precio_unitario en la DB
-        talle: item.talla,
-        color: item.color
-      }));
-      setFormData(prev => ({
-        ...prev,
-        cliente: clienteData,
-        detallesEnvio: detallesEnvio,
-      }));
-      console.log("Datos: ", formData);
-      console.log("carrito", cartItems)
+      console.log("Enviando cabecera de venta:", datosVenta);
+
+      // 2. Ejecutamos la petición asincrónica al backend
+      const resultado = await venta(datosVenta);
+      console.log("Respuesta del servidor (Cabecera guardada):", resultado);
+
+      if (resultado && resultado.id) {
+        // !!! ACÁ TENÉS EL ID AUTOGENERADO POR SPRINT BOOT !!!
+        console.log("ID de la venta creada:", resultado.id);
+
+        // Aquí vas a llamar a tu segunda función para guardar los detalles:
+        // await guardarDetallesDeVenta(resultado.id, cartItems);
+
+
+
+        // O a donde quieras redirigir al éxito
+      }
     } catch (error) {
-      console.error('Error al obtener los datos del cliente:', error);
-      Swal.fire({
-        title: "Error",
-        text: "Ocurrió un error al intentar obtener los datos del cliente. Por favor, inténtalo más tarde.",
-        theme: "dark",
-        icon: "error",
-        confirmButtonText: "Aceptar"
-      });
+      console.error("Error al procesar el pago en el submit:", error);
     }
-
-    // Simulación de procesamiento de pago
-
-
-    //alert('Pago procesado con éxito. ¡Gracias por tu compra!');
-
-    //clearCart();
-    //navigate('/');
   };
 
   const formatPrice = (price) => {
@@ -74,12 +84,7 @@ const Checkout = () => {
     }).format(price);
   };
 
-  useEffect(() => {
-    setId(localStorage.getItem("id"))
-
-  }, [id]);
-
-  // Si el carrito está vacío, no debería estar aquí, redirigir o mostrar mensaje
+  // Si el carrito está vacío, mostrar mensaje de advertencia
   if (cartItems.length === 0) {
     return (
       <div className="checkout-empty">
@@ -113,17 +118,17 @@ const Checkout = () => {
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="nombre">Nombre</label>
-                  <input type="text" id="nombre" name="nombre" required value={formData.nombre} />
+                  <input type="text" id="nombre" name="nombre" required value={formData.nombre} onChange={handleChange} />
                 </div>
                 <div className="form-group">
                   <label htmlFor="apellido">Apellido</label>
-                  <input type="text" id="apellido" name="apellido" required value={formData.apellido} />
+                  <input type="text" id="apellido" name="apellido" required value={formData.apellido} onChange={handleChange} />
                 </div>
               </div>
 
               <div className="form-group">
                 <label htmlFor="email">Correo Electrónico</label>
-                <input type="email" id="email" name="email" required value={formData.email} />
+                <input type="email" id="email" name="email" required value={formData.email} onChange={handleChange} />
               </div>
 
               <div className="form-group">
@@ -165,7 +170,7 @@ const Checkout = () => {
                 <div className="card-details-section">
                   <div className="form-group">
                     <label htmlFor="nombreTarjeta">Nombre en la tarjeta</label>
-                    <input type="text" id="nombreTarjeta" name="nombreTarjeta" required value={formData.nombreTarjeta} onChange={handleChange} />
+                    <input type="text" id="nombreTarjeta" name="nombreTarjeta" required value={formData.nombreTarjeta || ''} onChange={handleChange} />
                   </div>
 
                   <div className="form-group">
@@ -177,7 +182,7 @@ const Checkout = () => {
                       required
                       maxLength="19"
                       placeholder="0000 0000 0000 0000"
-                      value={formData.numeroTarjeta}
+                      value={formData.numeroTarjeta || ''}
                       onChange={handleChange}
                     />
                   </div>
@@ -192,7 +197,7 @@ const Checkout = () => {
                         required
                         placeholder="MM/AA"
                         maxLength="5"
-                        value={formData.fechaExpiracion}
+                        value={formData.fechaExpiracion || ''}
                         onChange={handleChange}
                       />
                     </div>
@@ -205,7 +210,7 @@ const Checkout = () => {
                         required
                         maxLength="4"
                         placeholder="123"
-                        value={formData.cvv}
+                        value={formData.cvv || ''}
                         onChange={handleChange}
                       />
                     </div>

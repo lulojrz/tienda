@@ -84,6 +84,38 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const venta = async (body) => {
+
+
+        try {
+            const response = await fetch("http://localhost:8080/confirmar/venta", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify(body)
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Error ${response.status}: ${errorText}`);
+                throw new Error("No autorizado o error de servidor");
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error al confirmar la venta:', error);
+            Swal.fire({
+                title: "Error",
+                text: "Ocurrió un error al intentar confirmar la venta. Por favor, inténtalo más tarde.",
+                theme: "dark",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
+        }
+
+    }
+
 
     const cerrarSesion = () => {
         Swal.fire({
@@ -114,7 +146,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ iniciarSesion, cerrarSesion, isLogin, user, setIsLogin, setUser, datosClientes, id, setId }}>
+        <AuthContext.Provider value={{ iniciarSesion, cerrarSesion, isLogin, user, setIsLogin, setUser, datosClientes, id, setId, venta }}>
             {children}
         </AuthContext.Provider>
     )

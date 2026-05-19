@@ -49,9 +49,23 @@ export const ProductosProvider = ({ children }) => {
         setProductoSeleccionado(producto)
     }
 
+    const obtenerIdProducto = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/productos/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            const data = await response.json();
+            return data
+        } catch (error) {
+            console.error('Error al obtener producto:', error);
+        }
+    }
 
     return (
-        <ProductosContext.Provider value={{ obtenerProductos, productos, portada, obtenerProducto, producto, filtrarProducto, productoSeleccionado }}>
+        <ProductosContext.Provider value={{ obtenerProductos, productos, portada, obtenerProducto, producto, filtrarProducto, productoSeleccionado, obtenerIdProducto }}>
             {children}
         </ProductosContext.Provider>
     )
