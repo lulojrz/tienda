@@ -92,10 +92,10 @@ const Checkout = () => {
           }
 
           return {
-            venta_id: resultado.id,
-            producto_id: item.id, 
+            venta: { id: resultado.id },
+            producto: { id: item.id }, 
             cantidad: item.cantidad,
-            variante_id: variante_id
+            variante: { id: variante_id }
           };
         }));
         
