@@ -5,12 +5,12 @@ import Swal from "sweetalert2";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isLogin, setIsLogin] = useState(() => localStorage.getItem("isLogin") === "true");
-    const [user, setUser] = useState(() => localStorage.getItem("user") || null);
-    const [id, setId] = useState(() => localStorage.getItem("id") || null);
+    const [isLogin, setIsLogin] = useState(() => (sessionStorage.getItem("isLogin") || localStorage.getItem("isLogin")) === "true");
+    const [user, setUser] = useState(() => sessionStorage.getItem("user") || localStorage.getItem("user") || null);
+    const [id, setId] = useState(() => sessionStorage.getItem("id") || localStorage.getItem("id") || null);
     const navigate = useNavigate();
 
-    const iniciarSesion = async (body) => {
+    const iniciarSesion = async (body, rememberMe = false) => {
         try {
             const response = await fetch('http://localhost:8080/clientes/login', {
                 method: 'POST',
@@ -23,10 +23,15 @@ export const AuthProvider = ({ children }) => {
             if (response.ok) {
                 const data = await response.json();
 
-                localStorage.setItem("id", data.id);
+                const storage = rememberMe ? localStorage : sessionStorage;
+                storage.setItem("id", data.id);
+                storage.setItem("isLogin", "true");
+                storage.setItem("token", data.token);
+                storage.setItem("user", body.usuario);
+
                 setId(data.id);
-
-
+                setIsLogin(true);
+                setUser(body.usuario);
 
                 Swal.fire({
                     title: "Inicio de sesión exitoso",
@@ -36,11 +41,6 @@ export const AuthProvider = ({ children }) => {
                     confirmButtonText: "Aceptar"
                 });
 
-                localStorage.setItem("isLogin", true);
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("user", body.usuario);
-                setIsLogin(true);
-                setUser(body.usuario);
                 navigate("/");
             } else {
                 Swal.fire({
@@ -65,9 +65,10 @@ export const AuthProvider = ({ children }) => {
 
     const datosClientes = async (id) => {
         try {
+            const token = sessionStorage.getItem("token") || localStorage.getItem("token");
             const response = await fetch(`http://localhost:8080/clientes/${id}`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             const data = await response.json();
@@ -88,11 +89,12 @@ export const AuthProvider = ({ children }) => {
 
 
         try {
+            const token = sessionStorage.getItem("token") || localStorage.getItem("token");
             const response = await fetch("http://localhost:8080/confirmar/venta", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify(body)
             });
@@ -131,7 +133,14 @@ export const AuthProvider = ({ children }) => {
             // Solo si el usuario hizo clic en "Aceptar"
             if (result.isConfirmed) {
                 // 1. Borramos TODO lo relacionado a la sesión
-                localStorage.clear();
+                localStorage.removeItem("id");
+                localStorage.removeItem("isLogin");
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                sessionStorage.removeItem("id");
+                sessionStorage.removeItem("isLogin");
+                sessionStorage.removeItem("token");
+                sessionStorage.removeItem("user");
                 // 2. Limpiamos los estados de React
                 setIsLogin(false);
                 setUser(null);

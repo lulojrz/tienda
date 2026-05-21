@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import './InicioSesion.css';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { useAuth } from '../context/AuthContext';
 
 
 const InicioSesion = () => {
     const { iniciarSesion } = useAuth();
     const [isLogin, setIsLogin] = useState(true);
+    const [rememberMe, setRememberMe] = useState(false);
     const [formData, setFormData] = useState({
         nombre: '',
         usuario: '',
@@ -28,7 +28,7 @@ const InicioSesion = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (isLogin) {
-            iniciarSesion(formData)
+            iniciarSesion(formData, rememberMe)
         }
         else {
             console.log(formData)
@@ -116,7 +116,14 @@ const InicioSesion = () => {
 
                         {isLogin && (
                             <div className="form-options">
-
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.9rem', cursor: 'pointer' }}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={rememberMe}
+                                        onChange={(e) => setRememberMe(e.target.checked)}
+                                    />
+                                    Recordarme
+                                </label>
                                 <a href="#" className="forgot-password">¿Olvidaste tu contraseña?</a>
                             </div>
                         )}
@@ -140,7 +147,6 @@ const InicioSesion = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };

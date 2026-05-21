@@ -27,7 +27,7 @@ const Checkout = () => {
   }]);
 
   useEffect(() => {
-    const savedId = localStorage.getItem("id");
+    const savedId = sessionStorage.getItem("id") || localStorage.getItem("id");
     if (savedId) {
       setId(savedId);
     }
@@ -103,11 +103,12 @@ const Checkout = () => {
         setDetallesVenta(nuevosDetalles);
 
         // Enviamos los detalles de la venta mediante POST respetando la sincronía
+        const token = sessionStorage.getItem("token") || localStorage.getItem("token");
         const respuestaDetalles = await fetch('http://localhost:8080/confirmar/detalles', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem("token")}`
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(nuevosDetalles)
         });
