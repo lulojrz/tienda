@@ -5,6 +5,7 @@ import './Checkout.css';
 import { useAuth } from '../context/AuthContext';
 import { useProductos } from '../context/ProductosContext';
 import Swal from 'sweetalert2';
+import emailjs from '@emailjs/browser';
 
 const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
@@ -115,11 +116,32 @@ const Checkout = () => {
 
         if (respuestaDetalles.ok) {
           console.log("Detalles guardados exitosamente en el servidor");
+
+          try {
+            const templateParams = {
+              nombre_cliente: formData.nombre,
+              apellido_cliente: formData.apellido,
+              email: formData.email, 
+              monto_total: formData.montoTotal,
+              id_venta: resultado.id,
+              metodo_pago: formData.metodoPago
+            };
+
+            await emailjs.send(
+              'service_t8gapsf',
+              'template_xsq1nba',
+              templateParams,
+              'LPoEIcBMfiZPyi9KK'
+            );
+            console.log("Correo de confirmación enviado exitosamente");
+          } catch (emailError) {
+            console.error("Error al enviar el correo:", emailError);
+          }
           
           await Swal.fire({
             icon: 'success',
             title: '¡Compra Exitosa!',
-            text: 'Tu pedido se ha procesado correctamente.',
+            text: 'Tu pedido se ha procesado correctamente y te enviamos un correo.',
             confirmButtonText: 'Continuar',
             confirmButtonColor: '#3085d6'
           });
