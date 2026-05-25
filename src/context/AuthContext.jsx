@@ -154,8 +154,84 @@ export const AuthProvider = ({ children }) => {
         });
     };
 
+    const editarUsuario = async (id, body) => {
+        try {
+            const token = sessionStorage.getItem("token") || localStorage.getItem("token");
+            const response = await fetch(`http://localhost:8080/clientes/editar/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                Swal.fire({
+                    title: "Actualización exitosa",
+                    text: "Tus datos han sido actualizados correctamente",
+                    icon: "success",
+                    confirmButtonText: "Aceptar"
+                });
+                return true;
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudieron actualizar los datos",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
+                return false;
+            }
+        } catch (error) {
+            console.error("Error al editar usuario:", error);
+            Swal.fire({
+                title: "Error",
+                text: "Ocurrió un error al intentar actualizar los datos.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
+            return false;
+        }
+    };
+
+    const verificarCredenciales = async (id, credenciales) => {
+        try {
+            const token = sessionStorage.getItem("token") || localStorage.getItem("token");
+            const response = await fetch(`http://localhost:8080/clientes/verificar/${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(credenciales)
+            });
+
+            if (response.ok) {
+                return true;
+            } else {
+                Swal.fire({
+                    title: "Verificación fallida",
+                    text: "La contraseña actual no es correcta.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
+                return false;
+            }
+        } catch (error) {
+            console.error("Error al verificar credenciales:", error);
+            Swal.fire({
+                title: "Error",
+                text: "Ocurrió un error al verificar tus credenciales.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
+            return false;
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ iniciarSesion, cerrarSesion, isLogin, user, setIsLogin, setUser, datosClientes, id, setId, venta }}>
+        <AuthContext.Provider value={{ iniciarSesion, cerrarSesion, isLogin, user, setIsLogin, setUser, datosClientes, id, setId, venta, editarUsuario, verificarCredenciales }}>
             {children}
         </AuthContext.Provider>
     )

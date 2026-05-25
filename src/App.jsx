@@ -8,6 +8,9 @@ import PaginaProductos from './pages/PaginaProductos';
 import DetallesProductos from './pages/DetallesProductos';
 import InicioSesion from './pages/InicioSesion';
 import Perfil from './pages/Perfil';
+import EditarPerfil from './pages/EditarPerfil';
+import CambiarContrasena from './pages/CambiarContrasena';
+import OlvidoContrasena from './pages/OlvidoContrasena';
 import Checkout from './pages/Checkout';
 import CartDrawer from './components/CartDrawer';
 
@@ -20,7 +23,10 @@ function App() {
         <Route path='/productos' element={<PaginaProductos />}></Route>
         <Route path='/productos/:id' element={<DetallesProductos />}></Route>
         <Route path='inicioSesion' element={<InicioSesion />}></Route>
+        <Route path='/olvidoContrasena' element={<OlvidoContrasena />}></Route>
         <Route path='/perfil' element={<Perfil />}></Route>
+        <Route path='/editarPerfil' element={<EditarPerfil />}></Route>
+        <Route path='/cambiarContrasena' element={<CambiarContrasena />}></Route>
         <Route path='/checkout' element={<Checkout />}></Route>
 
       </Routes>

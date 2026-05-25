@@ -2,26 +2,27 @@ import './Footer.css';
 import { useProductos } from '../context/ProductosContext';
 import { Link } from 'react-router-dom';
 
-const Footer = () => {
+const Footer = ({ hideFeatured = false }) => {
 
   const { portada } = useProductos()
-
 
   return (
     <footer className="footer">
       <div className="container">
-        <div className="hot-pick-banner">
-          <div className="hot-pick-content">
-            <span className="hot-pick-badge">DESTACADO DE LA SEMANA</span>
-            <h2 className="hot-pick-title">{portada.nombre}</h2>
-            <Link to={`/productos/${portada.id}`}>
-              <button className="btn-primary">COMPRAR AHORA</button>
-            </Link>
+        {!hideFeatured && portada && (
+          <div className="hot-pick-banner">
+            <div className="hot-pick-content">
+              <span className="hot-pick-badge">DESTACADO DE LA SEMANA</span>
+              <h2 className="hot-pick-title">{portada.nombre}</h2>
+              <Link to={`/productos/${portada.id}`}>
+                <button className="btn-primary">COMPRAR AHORA</button>
+              </Link>
+            </div>
+            <div className="hot-pick-image-container">
+              <img src={portada.imagen_principal} alt={portada.nombre} className="hot-pick-image" />
+            </div>
           </div>
-          <div className="hot-pick-image-container">
-            <img src={portada.imagen_principal} alt={portada.nombre} className="hot-pick-image" />
-          </div>
-        </div>
+        )}
 
         <div className="footer-bottom">
           <div className="footer-links">

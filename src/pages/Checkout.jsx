@@ -118,13 +118,39 @@ const Checkout = () => {
           console.log("Detalles guardados exitosamente en el servidor");
 
           try {
+            const fechaActual = new Date().toLocaleDateString('es-AR', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+
+            const listaProductosHtml = cartItems.map(item => `
+              <tr>
+                <td style="padding: 12px 0; border-bottom: 1px solid #eee;">
+                  <div style="font-weight: 500; color: #333;">${item.nombre}</div>
+                  <div style="font-size: 12px; color: #666;">
+                    ${item.color ? `Color: ${item.color}` : ''} 
+                    ${item.talla ? ` | Talle: ${item.talla}` : ''}
+                  </div>
+                </td>
+                <td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: center; color: #666;">
+                  x${item.cantidad}
+                </td>
+                <td style="padding: 12px 0 12px 12px; border-bottom: 1px solid #eee; text-align: right; color: #333;">
+                  $${item.precio * item.cantidad}
+                </td>
+              </tr>
+            `).join('');
+
             const templateParams = {
-              nombre_cliente: formData.nombre,
-              apellido_cliente: formData.apellido,
-              email: formData.email, 
+              cliente_nombre: formData.nombre,
+              venta_id: resultado.id,
+              fecha_compra: fechaActual,
+              lista_productos_html: listaProductosHtml,
+              metodo_pago: formData.metodoPago,
               monto_total: formData.montoTotal,
-              id_venta: resultado.id,
-              metodo_pago: formData.metodoPago
+              user_email: formData.email,
+              email: formData.email // EmailJS la requiere para el destinatario
             };
 
             await emailjs.send(

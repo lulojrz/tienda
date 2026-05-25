@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './InicioSesion.css';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
@@ -124,7 +125,7 @@ const InicioSesion = () => {
                                     />
                                     Recordarme
                                 </label>
-                                <a href="#" className="forgot-password">¿Olvidaste tu contraseña?</a>
+                                <Link to="/olvidoContrasena" className="forgot-password">¿Olvidaste tu contraseña?</Link>
                             </div>
                         )}
 
