@@ -29,7 +29,6 @@ export const ProductosProvider = ({ children }) => {
 
 
         } catch (error) {
-            console.error('Error al obtener productos:', error);
 
         }
 
@@ -40,7 +39,7 @@ export const ProductosProvider = ({ children }) => {
             const data = await response.json();
             setProducto(data)
         } catch (error) {
-            console.error('Error al obtener producto:', error);
+
         }
 
     }
@@ -61,7 +60,7 @@ export const ProductosProvider = ({ children }) => {
             const data = await response.json();
             return data
         } catch (error) {
-            console.error('Error al obtener producto:', error);
+
         }
     }
 

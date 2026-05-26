@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
                 });
             }
         } catch (error) {
-            console.error('Error al iniciar sesión:', error);
+
             Swal.fire({
                 title: "Error",
                 text: "Ocurrió un error al intentar iniciar sesión. Por favor, inténtalo más tarde.",
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error('Error al obtener los datos del cliente:', error);
+
             Swal.fire({
                 title: "Error",
                 text: "Ocurrió un error al intentar obtener los datos del cliente. Por favor, inténtalo más tarde.",
@@ -100,13 +100,13 @@ export const AuthProvider = ({ children }) => {
             });
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error(`Error ${response.status}: ${errorText}`);
+
                 throw new Error("No autorizado o error de servidor");
             }
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error('Error al confirmar la venta:', error);
+
             Swal.fire({
                 title: "Error",
                 text: "Ocurrió un error al intentar confirmar la venta. Por favor, inténtalo más tarde.",
@@ -184,7 +184,7 @@ export const AuthProvider = ({ children }) => {
                 return false;
             }
         } catch (error) {
-            console.error("Error al editar usuario:", error);
+
             Swal.fire({
                 title: "Error",
                 text: "Ocurrió un error al intentar actualizar los datos.",
@@ -219,7 +219,7 @@ export const AuthProvider = ({ children }) => {
                 return false;
             }
         } catch (error) {
-            console.error("Error al verificar credenciales:", error);
+
             Swal.fire({
                 title: "Error",
                 text: "Ocurrió un error al verificar tus credenciales.",

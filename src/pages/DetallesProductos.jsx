@@ -184,7 +184,7 @@ const DetallesProductos = () => {
 
                         <div className="stock-info">
                             {selectedVariant && selectedVariant.stock > 0 ? (
-                                <span className="in-stock">✓ En stock ({selectedVariant.stock} disponibles)</span>
+                                <span className="in-stock">✓ En stock</span>
                             ) : (
                                 <span className="out-of-stock">✗ Sin stock</span>
                             )}

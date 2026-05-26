@@ -12,6 +12,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { user, id, setId, venta } = useAuth(); // 'venta' es la función del Context
   const { obtenerIdProducto } = useProductos();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -44,6 +45,7 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsProcessing(true);
 
     // 1. Armamos el objeto limpio para la tabla 'ventas' (Cabecera)
     const datosVenta = {
@@ -57,21 +59,17 @@ const Checkout = () => {
     };
 
     try {
-      console.log("Enviando cabecera de venta:", datosVenta);
 
       // 2. Ejecutamos la petición asincrónica al backend
       const resultado = await venta(datosVenta);
-      console.log("Respuesta del servidor (Cabecera guardada):", resultado);
 
       if (resultado && resultado.id) {
         // !!! ACÁ TENÉS EL ID AUTOGENERADO POR SPRINT BOOT !!!
-        console.log("ID de la venta creada:", resultado.id);
 
         // Armamos los detalles de la venta con el formato específico
         const nuevosDetalles = await Promise.all(cartItems.map(async (item) => {
           // Hacemos la solicitud GET para traer los datos del producto
           const productoDB = await obtenerIdProducto(item.id);
-          console.log(`Producto consultado (ID: ${item.id}):`, productoDB);
 
           // Buscamos la variante que coincide con el color y talla del carrito
           let variante_id = null; 
@@ -100,12 +98,12 @@ const Checkout = () => {
           };
         }));
         
-        console.log("detallesVenta:", nuevosDetalles);
+
         setDetallesVenta(nuevosDetalles);
 
         // Enviamos los detalles de la venta mediante POST respetando la sincronía
         const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-        const respuestaDetalles = await fetch('http://localhost:8080/confirmar/detalles', {
+        const respuestaDetalles = await fetch(`${import.meta.env.VITE_BACKEND_URL}/confirmar/detalles`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -115,7 +113,6 @@ const Checkout = () => {
         });
 
         if (respuestaDetalles.ok) {
-          console.log("Detalles guardados exitosamente en el servidor");
 
           try {
             const fechaActual = new Date().toLocaleDateString('es-AR', {
@@ -154,14 +151,14 @@ const Checkout = () => {
             };
 
             await emailjs.send(
-              'service_t8gapsf',
-              'template_xsq1nba',
+              import.meta.env.VITE_EMAILJS_SERVICE_ID,
+              import.meta.env.VITE_EMAILJS_CHECKOUT_TEMPLATE_ID,
               templateParams,
-              'LPoEIcBMfiZPyi9KK'
+              import.meta.env.VITE_EMAILJS_PUBLIC_KEY
             );
-            console.log("Correo de confirmación enviado exitosamente");
+
           } catch (emailError) {
-            console.error("Error al enviar el correo:", emailError);
+
           }
           
           await Swal.fire({
@@ -176,7 +173,7 @@ const Checkout = () => {
           clearCart();
           navigate('/productos');
         } else {
-          console.error("Hubo un problema al guardar los detalles");
+
           await Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -186,13 +183,15 @@ const Checkout = () => {
         }
       }
     } catch (error) {
-      console.error("Error al procesar el pago en el submit:", error);
+
       await Swal.fire({
         icon: 'error',
         title: 'Error de conexión',
         text: 'Ocurrió un error al procesar la compra. Intenta de nuevo.',
         confirmButtonColor: '#d33'
       });
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -351,8 +350,14 @@ const Checkout = () => {
               )}
             </div>
 
-            <button type="submit" className="btn-primary submit-checkout-btn">
-              Confirmar y Pagar {formatPrice(getCartTotal())}
+            <button type="submit" className="btn-primary submit-checkout-btn" disabled={isProcessing}>
+              {isProcessing ? (
+                <>
+                  <span className="spinner"></span> Procesando pago...
+                </>
+              ) : (
+                `Confirmar y Pagar ${formatPrice(getCartTotal())}`
+              )}
             </button>
           </form>
         </div>

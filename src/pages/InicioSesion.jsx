@@ -32,7 +32,7 @@ const InicioSesion = () => {
             iniciarSesion(formData, rememberMe)
         }
         else {
-            console.log(formData)
+
         }
 
     };
