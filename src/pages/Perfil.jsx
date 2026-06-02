@@ -5,7 +5,8 @@ import Footer from '../components/Footer';
 import { useAuth } from '../context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_BACKEND_URL;
+// Colocamos la URL de Railway fija directamente para asegurar la conexión
+const API_URL = "https://backend-admin-production-fb26.up.railway.app";
 
 const Perfil = () => {
     const { user, isLogin, cerrarSesion, id, datosClientes } = useAuth();

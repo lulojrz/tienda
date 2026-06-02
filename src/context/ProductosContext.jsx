@@ -1,7 +1,8 @@
 import { createContext, useContext, useState } from "react";
 
 
-const API_URL = import.meta.env.VITE_BACKEND_URL;
+// Colocamos la URL de Railway fija directamente para asegurar la conexión
+const API_URL = "https://backend-admin-production-fb26.up.railway.app";
 
 const ProductosContext = createContext();
 export const ProductosProvider = ({ children }) => {
