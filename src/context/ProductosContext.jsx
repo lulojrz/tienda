@@ -1,6 +1,8 @@
 import { createContext, useContext, useState } from "react";
 
 
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+
 const ProductosContext = createContext();
 export const ProductosProvider = ({ children }) => {
     const [productos, setProductos] = useState([]);
@@ -11,7 +13,7 @@ export const ProductosProvider = ({ children }) => {
 
     const obtenerProductos = async () => {
         try {
-            const response = await fetch('http://localhost:8080/productos');
+            const response = await fetch(`${API_URL}/productos`);
             const data = await response.json();
             const filtrados = [];
             data.forEach(producto => {
@@ -35,7 +37,7 @@ export const ProductosProvider = ({ children }) => {
     }
     const obtenerProducto = async (id) => {
         try {
-            const response = await fetch(`http://localhost:8080/productos/${id}`);
+            const response = await fetch(`${API_URL}/productos/${id}`);
             const data = await response.json();
             setProducto(data)
         } catch (error) {
@@ -51,7 +53,7 @@ export const ProductosProvider = ({ children }) => {
     const obtenerIdProducto = async (id) => {
         try {
             const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-            const response = await fetch(`http://localhost:8080/productos/${id}`, {
+            const response = await fetch(`${API_URL}/productos/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`

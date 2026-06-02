@@ -5,6 +5,8 @@ import Footer from '../components/Footer';
 import { useAuth } from '../context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Perfil = () => {
     const { user, isLogin, cerrarSesion, id, datosClientes } = useAuth();
     const [compras, setCompras] = useState([]);
@@ -21,7 +23,7 @@ const Perfil = () => {
                     const clientInfo = await datosClientes(userId);
                     if (clientInfo) setClienteData(clientInfo);
 
-                    const response = await fetch(`http://localhost:8080/confirmar/venta/cliente/${userId}`, {
+                    const response = await fetch(`${API_URL}/confirmar/venta/cliente/${userId}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }

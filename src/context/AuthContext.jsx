@@ -2,6 +2,8 @@ import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -12,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
     const iniciarSesion = async (body, rememberMe = false) => {
         try {
-            const response = await fetch('http://localhost:8080/clientes/login', {
+            const response = await fetch(`${API_URL}/clientes/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,7 +68,7 @@ export const AuthProvider = ({ children }) => {
     const datosClientes = async (id) => {
         try {
             const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-            const response = await fetch(`http://localhost:8080/clientes/${id}`, {
+            const response = await fetch(`${API_URL}/clientes/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -90,7 +92,7 @@ export const AuthProvider = ({ children }) => {
 
         try {
             const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-            const response = await fetch("http://localhost:8080/confirmar/venta", {
+            const response = await fetch(`${API_URL}/confirmar/venta`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -157,7 +159,7 @@ export const AuthProvider = ({ children }) => {
     const editarUsuario = async (id, body) => {
         try {
             const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-            const response = await fetch(`http://localhost:8080/clientes/editar/${id}`, {
+            const response = await fetch(`${API_URL}/clientes/editar/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -198,7 +200,7 @@ export const AuthProvider = ({ children }) => {
     const verificarCredenciales = async (id, credenciales) => {
         try {
             const token = sessionStorage.getItem("token") || localStorage.getItem("token");
-            const response = await fetch(`http://localhost:8080/clientes/verificar/${id}`, {
+            const response = await fetch(`${API_URL}/clientes/verificar/${id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
