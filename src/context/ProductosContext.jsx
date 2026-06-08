@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 
 // Colocamos la URL de Railway fija directamente para asegurar la conexión
-const API_URL = "http://backend-admin-production-04cd.up.railway.app";
+const API_URL = "https://backend-admin-production-04cd.up.railway.app";
 
 const ProductosContext = createContext();
 export const ProductosProvider = ({ children }) => {
