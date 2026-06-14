@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 // Colocamos la URL de Railway fija directamente para asegurar la conexión
-const API_URL = "https://backend-admin-production-04cd.up.railway.app";
+const API_URL = "https://mi-backend-java-production.up.railway.app";
 
 const AuthContext = createContext();
 
